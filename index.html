@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Turn an iMessage screen recording into a deduplicated image sequence and PDF. Processing stays in your browser.">
+    <title>Message Recording Exporter</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main id="main">
+      <header class="hero">
+        <p class="eyebrow">Local screen-recording tool</p>
+        <h1>Turn a scrolling conversation into a clean export</h1>
+        <p class="lede">Choose an iPhone screen recording. This tool removes repeated frames and creates a continuous image, numbered pages, and a PDF.</p>
+        <p class="privacy"><span aria-hidden="true">●</span> Your recording stays on this device. Nothing is uploaded.</p>
+      </header>
+
+      <section class="card" aria-labelledby="recording-heading">
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">1</span>
+          <div>
+            <h2 id="recording-heading">Choose a recording</h2>
+            <p>Use a screen recording that scrolls through one Messages conversation.</p>
+          </div>
+        </div>
+        <label class="file-picker" for="recording">
+          <span class="file-action">Choose recording</span>
+          <span id="file-name">MP4 or MOV, up to 1 GB</span>
+        </label>
+        <input id="recording" class="visually-hidden" type="file" accept="video/mp4,video/quicktime,.mp4,.mov" aria-describedby="file-error">
+        <p id="file-error" class="error" role="alert"></p>
+        <button id="process" class="primary" type="button">Process recording</button>
+      </section>
+
+      <section id="progress-section" class="card" aria-labelledby="progress-heading" hidden>
+        <div class="step-heading">
+          <span class="step-number" aria-hidden="true">2</span>
+          <div>
+            <h2 id="progress-heading">Processing</h2>
+            <p id="status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <progress id="progress" max="100" value="0"><span>0</span>%</progress>
+        <p id="local-note" class="quiet">If your browser cannot read the iPhone video directly, it will load the included local converter. This can take several minutes for a high-frame-rate recording.</p>
+      </section>
+
+      <section id="results" class="card" aria-labelledby="results-heading" hidden>
+        <div class="step-heading">
+          <span class="step-number success" aria-hidden="true">✓</span>
+          <div>
+            <h2 id="results-heading">Export ready</h2>
+            <p id="result-summary"></p>
+          </div>
+        </div>
+        <img id="preview" alt="Preview of the deduplicated conversation">
+        <div class="actions">
+          <a id="continuous-download" class="primary" download="conversation-continuous.jpg">Download continuous image</a>
+          <button id="pdf-download" class="secondary" type="button">Create and download PDF</button>
+        </div>
+        <h3>Numbered images</h3>
+        <div id="page-downloads" class="page-downloads"></div>
+        <details>
+          <summary>Processing details</summary>
+          <pre id="diagnostics"></pre>
+        </details>
+        <button id="start-over" class="text-button" type="button">Process another recording</button>
+      </section>
+
+      <section class="how-it-works" aria-labelledby="how-heading">
+        <h2 id="how-heading">For a better result</h2>
+        <ul>
+          <li>Begin at one end of the conversation and scroll at a steady pace.</li>
+          <li>Brief reversals are fine. Large jumps may create separate sections.</li>
+          <li>Keep Messages visible and avoid opening Control Center while recording.</li>
+        </ul>
+      </section>
+    </main>
+    <footer>
+      <p>Open-source prototype. Runs locally in your browser.</p>
+    </footer>
+    <canvas id="work-canvas" hidden></canvas>
+    <video id="video" muted playsinline hidden></video>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
