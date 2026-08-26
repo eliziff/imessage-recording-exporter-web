@@ -2,9 +2,11 @@
 
 A local-only web app that turns a scrolling iMessage screen recording into:
 
-- one continuous deduplicated image;
-- automatically numbered PNG images; and
-- a letter-sized PDF.
+- one contiguous deduplicated image;
+- a ZIP of automatically numbered PNG images;
+- a letter-sized, paginated PDF;
+- numbered full-screen video excerpts; and
+- numbered audio excerpts.
 
 The recording never leaves the browser. The app has no server, account, analytics, cookies, or upload endpoint.
 
@@ -13,6 +15,8 @@ The recording never leaves the browser. The app has no server, account, analytic
 The browser first tries its native video decoder. It samples grayscale frames with Canvas, identifies the moving conversation region, matches overlapping horizontal bands, solves the frame positions as a graph, and uses low-error seams to assemble the result. Up/down scrolling is supported.
 
 If the browser cannot decode an iPhone HEVC recording, the app lazy-loads its included `ffmpeg.wasm` files and creates a temporary 12-fps H.264 copy in browser memory. The fallback is substantially slower than native decoding; no converter is downloaded or initialized on the normal path.
+
+Media clips use explicit start and end markers. Video excerpts preserve the complete recorded screen view, including scrolling and partial media visibility. Audio excerpts retain the recording's audio track independently of what remains visible onscreen. Files share an editable base name and use stable, zero-padded numbering.
 
 ## Run locally
 
@@ -33,7 +37,7 @@ npm test
 npm run build
 ```
 
-The focused test covers reversal-safe graph positioning and deliberate non-overlapping jumps. `test/browser_smoke.py` is an optional ChromeDriver test for local video fixtures; recordings and generated results are ignored by Git.
+The focused test covers reversal-safe graph positioning and deliberate non-overlapping jumps. `test/browser_smoke.py` is an optional ChromeDriver test for local video fixtures; add `--media` to verify MP4 and M4A clipping. Recordings and generated results are ignored by Git.
 
 See [CORPUS_RESULTS.md](CORPUS_RESULTS.md) for zero-configuration results on three public, untrimmed iOS recordings, including fast flicks, pauses, slow scrolling, and a documented low-texture hard case.
 
@@ -43,7 +47,8 @@ The GitHub Actions matrix runs the checks on Windows, macOS, and Linux. A separa
 
 Runtime dependencies are vendored so the deployed page remains self-contained:
 
-- `ffmpeg.wasm` for the lazy HEVC compatibility path;
+- `ffmpeg.wasm` for the lazy HEVC compatibility and media-excerpt paths;
+- fflate for the image ZIP; and
 - jsPDF for on-demand PDF creation.
 
 Dependency versions are pinned in `package-lock.json`. Dependabot checks npm packages and GitHub Actions weekly.

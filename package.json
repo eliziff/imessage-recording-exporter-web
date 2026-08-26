@@ -1,7 +1,7 @@
 {
   "name": "imessage-recording-exporter-web",
   "version": "1.0.0",
-  "description": "Turn a scrolling iMessage screen recording into a deduplicated image sequence and PDF, entirely in the browser.",
+  "description": "Create deduplicated image, PDF, audio, and video exports from a Messages screen recording in the browser.",
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.mjs",
@@ -15,6 +15,7 @@
     "@ffmpeg/core": "0.12.10",
     "@ffmpeg/ffmpeg": "0.12.15",
     "@ffmpeg/util": "0.12.2",
+    "fflate": "0.8.3",
     "jspdf": "4.2.1"
   }
 }
